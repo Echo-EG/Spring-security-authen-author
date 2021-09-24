@@ -17,11 +17,7 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
-    @GetMapping("/todo")
-    public ArrayList<TodoItem> getTodo(){
-        return this.todoService.getAllItems();
-    }
-//====================================
+    //====================================
 //    Testing purposes
     @GetMapping("/user")
     public String user(){
@@ -36,6 +32,12 @@ public class TodoController {
         return ("<h1>Welcome superAdmin<h1>");
     }
 //====================================
+
+    @GetMapping("/todo")
+    public ArrayList<TodoItem> getTodo(){
+        return this.todoService.getAllItems();
+    }
+
 
     @PostMapping("/post")
     public TodoItem postTodo(@RequestBody TodoItem todoItem){

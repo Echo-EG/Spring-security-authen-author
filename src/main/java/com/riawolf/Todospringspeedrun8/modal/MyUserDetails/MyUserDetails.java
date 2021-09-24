@@ -1,36 +1,48 @@
 package com.riawolf.Todospringspeedrun8.modal.MyUserDetails;
 
+import com.riawolf.Todospringspeedrun8.modal.User.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
-    private String userName;
+    private String username;
+    private String password;
+    private Boolean enabled;
+    private List<GrantedAuthority> role;
 
-    public MyUserDetails(String userName){
-        this.userName = userName;
+
+
+    public MyUserDetails(User user){
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.enabled = user.getEnabled();
+        this.role = Arrays.stream(user.getRole().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
-    public MyUserDetails(){
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("USER"));
+        return role;
     }
 
     @Override
     public String getPassword() {
-        return "pass";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -50,6 +62,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
