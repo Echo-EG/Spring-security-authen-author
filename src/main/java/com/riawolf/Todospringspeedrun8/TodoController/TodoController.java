@@ -11,27 +11,11 @@ import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins = "*")
-//@RequestMapping("/api")
+@RequestMapping("/api")
 public class TodoController {
 
     @Autowired
     private TodoService todoService;
-
-    //====================================
-//    Testing purposes
-    @GetMapping("/user")
-    public String user(){
-        return ("<h1>Welcome user<h1>");
-    }
-    @GetMapping("/admin")
-    public String admin(){
-        return ("<h1>Welcome admin<h1>");
-    }
-    @GetMapping("/superadmin")
-    public String superAdmin(){
-        return ("<h1>Welcome superAdmin<h1>");
-    }
-//====================================
 
     @GetMapping("/todo")
     public ArrayList<TodoItem> getTodo(){

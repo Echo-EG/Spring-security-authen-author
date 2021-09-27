@@ -12,4 +12,5 @@ public class TodoItem {
     private Integer id;
     private String title;
     private Boolean checked = false;
+    private Integer ownerId;
 }

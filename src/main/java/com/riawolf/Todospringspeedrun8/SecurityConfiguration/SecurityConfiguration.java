@@ -1,5 +1,6 @@
 package com.riawolf.Todospringspeedrun8.SecurityConfiguration;
 
+import com.riawolf.Todospringspeedrun8.modal.MyUserDetailsService.MyUserDetailsService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    UserDetailsService userDetailsService;
+    MyUserDetailsService userDetailsService;
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
+                "/swagger-resources/**", "/configuration/**", "/swagger-ui.html"
+                , "/webjars/**", "/csrf", "/");
+    }
+
 
 
     @Override
@@ -44,31 +53,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
 
-                .antMatchers("/superadmin/**").hasAuthority("SUPERADMIN")
-                .antMatchers("/admin/**").hasAnyAuthority("SUPERADMIN", "ADMIN")
-                .antMatchers("/user/**").hasAnyAuthority("ADMIN", "SUPERADMIN","USER")
-                .and().formLogin();
+
+//        http.antMatcher("/**")
+//                .authorizeRequests()
+//                .antMatchers("/").permitAll()
+//                .anyRequest().authenticated()
+//                .and().formLogin();
+
+
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/anonymous*").anonymous()
+                .antMatchers("/login*").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin();
 
     }
 
 }
 
-//            auth.jdbcAuthentication()
-//                .dataSource(dataSource)
-//                .passwordEncoder(passwordEncoder())
-//                .usersByUsernameQuery("select username, pasword, enabled from Users where username = ?")
-//                .authoritiesByUsernameQuery("select username, role from Users where username = ?");
-
-
-//                .dataSource(dataSource)
-////                .usersByUsernameQuery("select username, pasword, enabled from Users where username = ?")
-////                .authoritiesByUsernameQuery("select username, role from Users where username = ?");
-//                .usersByUsernameQuery("select username ,pasword ,enabled "
-//                        + "from Users "
-//                        + "where username = ?")
-//                .authoritiesByUsernameQuery("select username, role "
-//                        + "from Users "
-//                        + "where username = ?");
 
